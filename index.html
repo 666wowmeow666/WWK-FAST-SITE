@@ -1,0 +1,1788 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WWK Fast — международные грузоперевозки из ЕС, Китая и Турции</title>
+<meta name="description" content="WWK Fast sp. z o.o. — международная логистика из ЕС, Китая и Турции в Россию и Беларусь. Авто, ж/д, авиа и морем. 20 000 отправлений в год. Варшава.">
+<link rel="icon" type="image/png" href="assets/logo-mark.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"
+  }
+}
+</script>
+<style>
+  :root{
+    --bg:#ffffff;
+    --bg2:#f4f4f2;
+    --fg:#1b1d20;
+    --muted:#585c63;
+    --faint:#8a8f96;
+    --accent:#e3262a;
+    --accent-dark:#c21b20;
+    --accent-ink:#ffffff;
+    --line:rgba(27,29,32,.1);
+    --line-strong:rgba(27,29,32,.18);
+    --card:#ffffff;
+    --font-display:'Montserrat',system-ui,sans-serif;
+    --font-body:'Inter',system-ui,sans-serif;
+    --font-mono:'Montserrat',system-ui,sans-serif;
+    --ease:cubic-bezier(.22,1,.36,1);
+  }
+  html,body{background:var(--bg);color:var(--fg)}
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{overflow-x:clip;scroll-behavior:smooth}
+  body{overflow-x:clip;font-family:var(--font-body);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}
+  ::selection{background:rgba(227,38,42,.18);color:var(--fg)}
+  a{color:inherit;text-decoration:none}
+  img{max-width:100%;display:block}
+  .lbl-font{font-family:var(--font-mono);font-weight:600;text-transform:uppercase}
+
+  /* ---------- grain ---------- */
+  .grain{position:fixed;inset:0;z-index:60;pointer-events:none;opacity:.035;mix-blend-mode:multiply;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E")}
+
+  /* ---------- nav ---------- */
+  .nav{position:fixed;top:0;left:0;right:0;z-index:50;transition:background .4s var(--ease),border-color .4s var(--ease),backdrop-filter .4s;border-bottom:1px solid transparent}
+  .nav__inner{max-width:1280px;margin:0 auto;padding:18px clamp(20px,4vw,48px);display:flex;align-items:center;gap:32px}
+  .nav.is-scrolled{background:rgba(255,255,255,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border-bottom-color:var(--line)}
+  .logo{display:flex;align-items:center;gap:10px;white-space:nowrap}
+  .logo img.mark{height:30px;width:auto}
+  .logo img.word{height:17px;width:auto}
+  .nav__links{display:flex;gap:30px;margin-left:auto}
+  .nav__links a{font-size:14px;font-weight:500;color:var(--muted);transition:color .25s;position:relative}
+  .nav__links a::after{content:'';position:absolute;left:0;bottom:-5px;height:2px;width:100%;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .3s var(--ease)}
+  .nav__links a:hover{color:var(--fg)}
+  .nav__links a:hover::after{transform:scaleX(1)}
+  .nav__cta{font-family:var(--font-display);font-size:13px;font-weight:700;padding:11px 22px;border-radius:999px;background:var(--accent);color:var(--accent-ink);transition:transform .25s var(--ease),box-shadow .25s,background .25s}
+  .nav__cta:hover{transform:translateY(-1px);background:var(--accent-dark);box-shadow:0 8px 24px rgba(227,38,42,.28)}
+  .burger{display:none;margin-left:auto;width:42px;height:42px;border:1px solid var(--line-strong);border-radius:999px;background:rgba(255,255,255,.8);cursor:pointer;align-items:center;justify-content:center;flex-direction:column;gap:5px}
+  .burger i{display:block;width:16px;height:2px;background:var(--fg);transition:transform .3s var(--ease),opacity .3s}
+  .menu{position:fixed;inset:0;z-index:49;background:rgba(255,255,255,.97);backdrop-filter:blur(10px);display:none;flex-direction:column;justify-content:center;gap:8px;padding:0 28px}
+  .menu.open{display:flex}
+  .menu a{font-family:var(--font-display);font-weight:700;font-size:clamp(28px,7vw,44px);letter-spacing:-.02em;padding:12px 0;border-bottom:1px solid var(--line)}
+  .menu a:last-child{border-bottom:none}
+  .menu .num{font-family:var(--font-mono);font-weight:600;font-size:12px;color:var(--accent);margin-right:14px;letter-spacing:.1em}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;min-height:100vh;min-height:100dvh;display:grid;grid-template-columns:minmax(0,.94fr) minmax(0,1.06fr);align-items:center;
+    padding:104px clamp(20px,5vw,64px) 56px;overflow:hidden;background:
+    radial-gradient(900px 640px at 76% 46%, rgba(227,38,42,.07), transparent 62%),
+    linear-gradient(180deg,#ffffff 0%,#f6f6f4 100%)}
+  .hero__copy{position:relative;z-index:2;max-width:36rem}
+  .eyebrow{font-family:var(--font-mono);font-weight:700;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:12px;margin-bottom:26px}
+  .eyebrow::before{content:'';width:36px;height:3px;border-radius:2px;background:var(--accent)}
+  .hero h1{font-family:var(--font-display);font-weight:800;font-size:clamp(32px,4.4vw,62px);line-height:1.06;letter-spacing:-.03em;margin-bottom:26px}
+  .hero h1 em{font-style:normal;color:var(--accent)}
+  .hero__sub{font-size:16.5px;line-height:1.65;color:var(--muted);max-width:29rem;margin-bottom:38px}
+  .hero__sub b{color:var(--fg);font-weight:600}
+  .hero__actions{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:56px}
+  .btn{display:inline-flex;align-items:center;gap:10px;font-family:var(--font-display);font-size:14px;font-weight:700;padding:15px 28px;border-radius:999px;transition:transform .25s var(--ease),box-shadow .25s,background .25s,border-color .25s;cursor:pointer}
+  .btn--primary{background:var(--accent);color:var(--accent-ink)}
+  .btn--primary:hover{transform:translateY(-2px);background:var(--accent-dark);box-shadow:0 12px 30px rgba(227,38,42,.3)}
+  .btn--ghost{border:1.5px solid var(--fg);color:var(--fg)}
+  .btn--ghost:hover{background:var(--fg);color:#fff}
+  .btn svg{transition:transform .3s var(--ease)}
+  .btn:hover svg{transform:translate(2px,-2px)}
+  .hero__stats{display:grid;grid-template-columns:repeat(2,auto);gap:18px clamp(36px,4vw,64px);justify-content:start}
+  .stat{display:flex;flex-direction:column;gap:4px;padding-left:14px;border-left:3px solid var(--accent)}
+  .stat__num{font-family:var(--font-display);font-weight:800;font-size:clamp(24px,2.4vw,34px);letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1.1}
+  .stat__num i{font-style:normal;color:var(--accent)}
+  .stat__label{font-family:var(--font-mono);font-weight:600;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint)}
+  .hero__stage{position:relative;z-index:1;align-self:stretch;min-height:420px}
+  .globe-wrap{position:absolute;inset:0}
+  .globe-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none;opacity:0;transition:opacity .45s ease-out}
+  .hero.is-ready .globe-canvas{opacity:1}
+  .globe-label{position:absolute;left:0;top:0;transform:translate(-50%,-140%);font-family:var(--font-mono);font-weight:700;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--fg);white-space:nowrap;pointer-events:none;background:rgba(255,255,255,.88);padding:4px 9px;border-radius:999px;box-shadow:0 2px 10px rgba(27,29,32,.12);transition:opacity .25s;opacity:0}
+  .globe-label::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);margin-right:7px;vertical-align:1px}
+  .globe-label.is-hub{background:var(--accent);color:#fff}
+  .globe-label.is-hub::before{background:#fff}
+  .hero__hint{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);font-family:var(--font-mono);font-weight:600;font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);display:flex;align-items:center;gap:10px;z-index:2}
+  .hero__hint::before,.hero__hint::after{content:'';width:28px;height:1px;background:var(--line-strong)}
+
+  /* ---------- marquee ---------- */
+  .marquee{padding:18px 0;overflow:hidden;background:var(--accent)}
+  .marquee__track{display:flex;width:max-content;will-change:transform}
+  .marquee__track span{font-family:var(--font-mono);font-weight:700;font-size:12.5px;letter-spacing:.22em;text-transform:uppercase;color:rgba(255,255,255,.82);padding-right:56px;white-space:nowrap}
+  .marquee__track span b{color:#fff;font-weight:800}
+  @keyframes marquee{to{transform:translateX(-50%)}}
+
+  /* ---------- sections ---------- */
+  section.block{padding:clamp(90px,11vw,150px) clamp(20px,5vw,64px)}
+  .container{max-width:1280px;margin:0 auto}
+  .sec-head{display:flex;align-items:flex-end;justify-content:space-between;gap:32px;margin-bottom:clamp(44px,6vw,72px)}
+  .sec-head h2{font-family:var(--font-display);font-weight:800;font-size:clamp(26px,3.4vw,44px);line-height:1.12;letter-spacing:-.025em;max-width:22ch}
+  .sec-head .idx{font-family:var(--font-mono);font-weight:700;font-size:12px;color:var(--faint);letter-spacing:.18em;white-space:nowrap}
+  .sec-head .idx b{color:var(--accent);font-weight:800}
+
+  /* services */
+  .services{background:var(--bg)}
+  .svc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+  .svc{position:relative;border:1px solid var(--line);border-radius:20px;padding:30px 26px 28px;background:var(--card);transition:border-color .3s,transform .3s var(--ease),box-shadow .3s;overflow:hidden}
+  .svc::after{content:'';position:absolute;left:0;right:0;top:0;height:3px;background:var(--accent);transform:scaleX(0);transform-origin:left;transition:transform .4s var(--ease)}
+  .svc:hover{border-color:rgba(227,38,42,.35);transform:translateY(-4px);box-shadow:0 18px 40px rgba(27,29,32,.08)}
+  .svc:hover::after{transform:scaleX(1)}
+  .svc__num{font-family:var(--font-mono);font-weight:700;font-size:11px;color:var(--faint);letter-spacing:.16em;margin-bottom:44px}
+  .svc__icon{width:46px;height:46px;border-radius:50%;background:rgba(227,38,42,.08);display:grid;place-items:center;margin-bottom:22px;color:var(--accent)}
+  .svc__icon svg{width:22px;height:22px}
+  .svc h3{font-family:var(--font-display);font-weight:700;font-size:17px;letter-spacing:-.01em;margin-bottom:6px}
+  .svc__time{font-family:var(--font-mono);font-weight:700;font-size:11px;color:var(--accent);letter-spacing:.12em;text-transform:uppercase;margin-bottom:16px}
+  .svc p{font-size:14px;line-height:1.6;color:var(--muted)}
+
+  /* advantages */
+  .adv{background:var(--bg2)}
+  .adv-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border:1px solid var(--line);border-radius:24px;overflow:hidden;background:#fff}
+  .adv-cell{padding:clamp(28px,3.4vw,48px);border-bottom:1px solid var(--line);position:relative;transition:background .3s}
+  .adv-cell:nth-child(odd){border-right:1px solid var(--line)}
+  .adv-cell:nth-last-child(-n+2){border-bottom:none}
+  .adv-cell:hover{background:#fcfcfb}
+  .adv-cell .k{font-family:var(--font-display);font-weight:800;font-size:13px;color:var(--accent);letter-spacing:.12em;margin-bottom:18px;display:block}
+  .adv-cell h3{font-family:var(--font-display);font-weight:700;font-size:clamp(17px,1.6vw,21px);margin-bottom:12px;letter-spacing:-.015em}
+  .adv-cell p{font-size:14.5px;color:var(--muted);max-width:40ch}
+
+  /* geography */
+  .lanes{display:flex;flex-direction:column}
+  .lane{display:grid;grid-template-columns:60px 1fr 1fr 130px;gap:24px;align-items:center;padding:30px 8px;border-bottom:1px solid var(--line);transition:background .3s,padding-left .3s var(--ease)}
+  .lane:first-child{border-top:1px solid var(--line)}
+  .lane:hover{background:var(--bg2);padding-left:18px}
+  .lane__idx{font-family:var(--font-mono);font-weight:700;font-size:12px;color:var(--faint)}
+  .lane__route{font-family:var(--font-display);font-weight:700;font-size:clamp(15px,1.7vw,21px);letter-spacing:-.01em}
+  .lane__route i{font-style:normal;color:var(--accent);padding:0 10px;font-weight:800;font-size:.85em}
+  .lane__modes{display:flex;gap:8px;flex-wrap:wrap}
+  .lane__modes span{font-family:var(--font-mono);font-weight:600;font-size:10px;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--line-strong);border-radius:999px;padding:6px 13px;color:var(--muted)}
+  .lane__time{font-family:var(--font-mono);font-weight:600;font-size:12px;color:var(--muted);text-align:right;letter-spacing:.04em}
+  .lane__time b{color:var(--accent);font-weight:800}
+
+  /* contacts (dark charcoal band) */
+  .contact{--fg:#f4f4f2;--muted:#a9adb3;--faint:#7c8188;--line:rgba(244,244,242,.1);--line-strong:rgba(244,244,242,.2);color:var(--fg);
+    background:radial-gradient(800px 500px at 15% 100%, rgba(227,38,42,.22), transparent 60%),#17191c}
+  .contact__logo{height:clamp(90px,10vw,130px);width:auto;margin-bottom:34px}
+  .contact-grid{display:grid;grid-template-columns:1.2fr 1fr;gap:clamp(40px,6vw,90px);align-items:start}
+  .contact h2{font-family:var(--font-display);font-weight:800;font-size:clamp(30px,4vw,52px);line-height:1.08;letter-spacing:-.03em;margin-bottom:22px}
+  .contact h2 em{font-style:normal;color:var(--accent)}
+  .contact__sub{color:var(--muted);font-size:16px;max-width:34rem;margin-bottom:38px}
+  .contact .btn--ghost{border-color:rgba(244,244,242,.5);color:var(--fg)}
+  .contact .btn--ghost:hover{background:#fff;color:#17191c}
+  .contact-rows{display:flex;flex-direction:column;gap:0;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:rgba(244,244,242,.03)}
+  .crow{display:flex;align-items:center;gap:18px;padding:22px 26px;border-bottom:1px solid var(--line);transition:background .25s}
+  .crow:last-child{border-bottom:none}
+  .crow:hover{background:rgba(244,244,242,.04)}
+  .crow .ic{width:40px;height:40px;border-radius:50%;background:var(--accent);display:grid;place-items:center;color:#fff;flex:none}
+  .crow .ic svg{width:17px;height:17px}
+  .crow .lbl{font-family:var(--font-mono);font-weight:600;font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);margin-bottom:3px}
+  .crow .val{font-weight:600;font-size:15.5px}
+  .crow a.val:hover{color:var(--accent)}
+
+  /* footer */
+  footer{padding:40px clamp(20px,5vw,64px);border-top:1px solid var(--line);background:#fff}
+  .foot{max-width:1280px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;gap:24px 40px;flex-wrap:wrap}
+  .foot__brand{display:flex;align-items:center;gap:28px;flex-wrap:wrap}
+  .foot__logo{height:64px;width:auto}
+  .foot__legal{font-size:12px;color:var(--faint);line-height:1.8}
+  .foot__up{font-family:var(--font-mono);font-weight:700;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);display:flex;align-items:center;gap:10px;transition:color .25s}
+  .foot__up:hover{color:var(--accent)}
+
+
+  /* ---------- scroll progress + page route ---------- */
+  body{position:relative}
+  .progress{position:fixed;top:0;left:0;width:100%;height:3px;background:var(--accent);transform:scaleX(0);transform-origin:0 50%;z-index:70;pointer-events:none}
+  .route-svg{position:absolute;left:0;top:0;width:100%;height:0;pointer-events:none;z-index:3;overflow:visible}
+  .route-track{fill:none;stroke:rgba(27,29,32,.2);stroke-width:1.5;stroke-dasharray:1 7;stroke-linecap:round}
+  .route-prog{fill:none;stroke:var(--accent);stroke-width:2;stroke-linecap:round}
+  .route-cp{fill:#fff;stroke:rgba(27,29,32,.28);stroke-width:1.5;transition:fill .35s,stroke .35s}
+  .route-cp.is-on{fill:var(--accent);stroke:var(--accent)}
+  .route-head{transition:opacity .3s}
+  .route-head .core{fill:var(--accent);stroke:#fff;stroke-width:2}
+  .route-head .ring{fill:var(--accent);opacity:.25;transform-box:fill-box;transform-origin:center;animation:routePulse 1.8s ease-out infinite}
+  @keyframes routePulse{0%{transform:scale(.5);opacity:.45}100%{transform:scale(2);opacity:0}}
+  .route-pin circle{fill:#fff;stroke:rgba(27,29,32,.3);stroke-width:2;transition:fill .35s,stroke .35s}
+  .route-pin.is-on circle{fill:var(--accent);stroke:var(--accent)}
+
+  /* ---------- globe stage interaction ---------- */
+  .hero__stage{cursor:grab;touch-action:pan-y;-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
+  .hero__stage.is-drag{cursor:grabbing}
+
+  /* ---------- process ---------- */
+  .process{background:var(--bg)}
+  .steps{--p:0;position:relative;display:grid;grid-template-columns:repeat(5,1fr);gap:24px}
+  .steps__line{position:absolute;left:10%;right:10%;top:24px;height:2px;background:var(--line-strong);border-radius:2px}
+  .steps__fill{position:absolute;inset:0;background:var(--accent);transform:scaleX(var(--p));transform-origin:0 50%;border-radius:2px}
+  .steps__head{position:absolute;top:50%;left:calc(var(--p) * 100%);width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 6px rgba(227,38,42,.16)}
+  .step{position:relative;text-align:center}
+  .step__dot{position:relative;z-index:1;width:50px;height:50px;border-radius:50%;margin:0 auto 22px;background:#fff;border:2px solid var(--line-strong);display:grid;place-items:center;font-family:var(--font-display);font-weight:800;font-size:14px;color:var(--faint);transition:background .35s,border-color .35s,color .35s,box-shadow .35s}
+  .step.is-on .step__dot{background:var(--accent);border-color:var(--accent);color:#fff;box-shadow:0 0 0 8px rgba(227,38,42,.1)}
+  .step h3{font-family:var(--font-display);font-weight:700;font-size:16.5px;letter-spacing:-.01em;margin-bottom:8px}
+  .step p{font-size:14px;color:var(--muted);max-width:24ch;margin:0 auto}
+
+  /* ---------- calc ---------- */
+  .calc{background:var(--bg2)}
+  .calc-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:20px;align-items:stretch}
+  .calc-panel{background:#fff;border:1px solid var(--line);border-radius:24px;padding:clamp(24px,3vw,40px)}
+  .field{margin-bottom:26px}
+  .field--last{margin-bottom:0}
+  .field__lbl{font-family:var(--font-mono);font-weight:700;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-bottom:12px}
+  .field__lbl span{font-weight:600;letter-spacing:.06em;text-transform:none;color:var(--faint)}
+  .seg{display:flex;flex-wrap:wrap;gap:8px}
+  .seg button{font-family:var(--font-display);font-weight:700;font-size:14px;padding:12px 20px;border-radius:999px;border:1.5px solid var(--line-strong);background:#fff;color:var(--fg);cursor:pointer;transition:background .2s,border-color .2s,color .2s,opacity .2s}
+  .seg button:hover:not(:disabled){border-color:var(--fg)}
+  .seg button[aria-pressed="true"]{background:var(--fg);border-color:var(--fg);color:#fff}
+  .seg--mode button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent)}
+  .seg button:disabled{opacity:.3;cursor:not-allowed;text-decoration:line-through}
+  .seg button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+  .inputs{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .inp{display:flex;align-items:center;gap:8px;border:1.5px solid var(--line-strong);border-radius:14px;padding:0 16px;background:#fff;transition:border-color .2s}
+  .inp:focus-within{border-color:var(--accent)}
+  .inp input{border:0;outline:0;font:500 16px var(--font-body);padding:14px 0;width:100%;min-width:0;background:transparent;color:var(--fg)}
+  .inp span{font-family:var(--font-display);font-weight:700;font-size:13px;color:var(--faint)}
+  .calc-result{position:relative;overflow:hidden;display:flex;flex-direction:column;border-radius:24px;padding:clamp(24px,3vw,40px);color:#f4f4f2;
+    background:radial-gradient(520px 320px at 100% 0%, rgba(227,38,42,.35), transparent 65%),#17191c}
+  .res__route{display:flex;align-items:center;gap:14px;font-family:var(--font-display);font-weight:700;font-size:17px;margin-bottom:34px}
+  .res__line{flex:1;height:2px;background:repeating-linear-gradient(90deg,rgba(255,255,255,.3) 0 4px,transparent 4px 10px);position:relative}
+  .res__line i{position:absolute;top:50%;left:0;width:10px;height:10px;margin-top:-5px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 6px rgba(227,38,42,.25);animation:ride 2.6s var(--ease) infinite}
+  @keyframes ride{0%{left:0}85%,100%{left:calc(100% - 10px)}}
+  .res__lbl{font-family:var(--font-mono);font-weight:700;font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#8d9198;margin-bottom:6px}
+  .res__days{font-family:var(--font-display);font-weight:800;font-size:clamp(56px,6.6vw,92px);letter-spacing:-.04em;line-height:1}
+  .res__days small{font-size:.28em;font-weight:700;letter-spacing:0;color:#a9adb3;margin-left:10px}
+  .res__days.is-flip span{display:inline-block;animation:flip .5s var(--ease)}
+  @keyframes flip{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .res__list{list-style:none;display:grid;gap:10px;margin:28px 0 32px;color:#c9ccd1;font-size:14.5px}
+  .res__list li{display:flex;gap:10px;align-items:flex-start}
+  .res__list li::before{content:'';flex:none;width:16px;height:16px;margin-top:3px;border-radius:50%;background:var(--accent) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath d='M4.5 8.2l2.3 2.3 4.7-5' fill='none' stroke='white' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat}
+  .calc-result .btn{align-self:flex-start;margin-top:auto}
+  .res__note{margin-top:16px;font-size:12.5px;color:#8d9198;max-width:40ch}
+
+  /* ---------- reveals ---------- */
+  .rv{opacity:0;transform:translateY(26px);transition:opacity .8s var(--ease),transform .8s var(--ease)}
+  .rv.is-in{opacity:1;transform:none}
+  .d1{transition-delay:.08s}.d2{transition-delay:.16s}.d3{transition-delay:.24s}.d4{transition-delay:.32s}
+
+  /* ---------- responsive ---------- */
+  @media (max-width:1280px){
+    .hero__stats{gap:16px 44px}
+  }
+  @media (max-width:1080px){
+    .svc-grid{grid-template-columns:repeat(2,1fr)}
+    .lane{grid-template-columns:44px 1fr 120px}
+    .lane__modes{grid-column:2;grid-row:2;margin-top:2px}
+  }
+  @media (max-width:900px){
+    .nav__links,.nav__cta{display:none}
+    .burger{display:flex}
+    .hero{grid-template-columns:1fr;padding-top:104px;min-height:auto;row-gap:8px}
+    .hero__stage{min-height:96vw;min-height:min(96vw,500px)}
+    .hero__hint{position:static;transform:none;grid-column:1;justify-content:center;margin-top:-6px}
+    .steps{grid-template-columns:1fr;gap:30px}
+    .steps__line{left:24px;right:auto;top:25px;bottom:25px;width:2px;height:auto}
+    .steps__fill{transform:scaleY(var(--p));transform-origin:50% 0}
+    .steps__head{left:50%;top:calc(var(--p) * 100%)}
+    .step{display:grid;grid-template-columns:50px 1fr;gap:20px;text-align:left;align-items:start}
+    .step__dot{margin:0}
+    .step h3{margin-top:12px}
+    .step p{margin:0;max-width:none}
+    .calc-grid{grid-template-columns:1fr}
+    .globe-label{display:none}
+    .contact-grid{grid-template-columns:1fr}
+    .adv-grid{grid-template-columns:1fr}
+    .adv-cell{border-right:none !important}
+    .adv-cell:nth-last-child(-n+2){border-bottom:1px solid var(--line)}
+    .adv-cell:last-child{border-bottom:none}
+  }
+  @media (max-width:600px){
+    .svc-grid{grid-template-columns:1fr}
+    .sec-head{flex-direction:column;align-items:flex-start;gap:14px}
+    .lane{grid-template-columns:1fr;gap:10px}
+    .lane__idx{display:none}
+    .lane__time{text-align:left}
+    .lane__modes{grid-column:auto;grid-row:auto}
+    .lane__route i{padding:0 6px}
+    .hero__actions{gap:10px}
+    .hero__actions .btn{padding:15px 14px;font-size:13px;white-space:nowrap;gap:8px}
+    .hero__actions .btn{flex:1;justify-content:center}
+    .hero__stats{gap:20px 28px}
+  }
+  .pfx{position:fixed;inset:0;width:100%;height:100%;z-index:2;pointer-events:none}
+  .split .w{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.08em;margin-bottom:-.08em}
+  .split .wi{display:inline-block;transform:translateY(105%) rotate(4deg);transform-origin:0 100%;opacity:0;
+    transition:transform 1s cubic-bezier(.16,1,.3,1),opacity .6s ease;transition-delay:calc(var(--i)*70ms + 150ms)}
+  .split.is-in .wi{transform:none;opacity:1}
+  @media (prefers-reduced-motion:reduce){
+    .split .wi{transform:none;opacity:1;transition:none}
+    .marquee__track{animation:none;transform:none}
+    .rv{opacity:1;transform:none;transition:none}
+    .globe-canvas{transition:none}
+    html{scroll-behavior:auto}
+    .btn,.svc,.lane,.crow{transition:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+<div class="progress" id="progress" aria-hidden="true"></div>
+<canvas class="pfx" id="pfx" aria-hidden="true"></canvas>
+<svg class="route-svg" id="routeSvg" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <path class="route-track"/><path class="route-prog"/>
+  <g class="route-cps"></g>
+  <g class="route-pin"><circle r="8"/></g>
+  <g class="route-head" style="opacity:0"><circle class="ring" r="9"/><circle class="core" r="5.5"/></g>
+</svg>
+
+<header class="nav" id="nav">
+  <div class="nav__inner">
+    <a class="logo" href="#top" aria-label="WWK Fast — на главную"><img class="mark" src="assets/logo-mark.png" alt="" width="44" height="30"><img class="word" src="assets/logo-word.png" alt="WWK FAST" width="124" height="17"></a>
+    <nav class="nav__links" aria-label="Основная навигация">
+      <a href="#services">Услуги</a>
+      <a href="#advantages">Преимущества</a>
+      <a href="#geo">География</a>
+      <a href="#calc">Расчёт</a>
+      <a href="#contacts">Контакты</a>
+    </nav>
+    <a class="nav__cta" href="#contacts">Связаться</a>
+    <button class="burger" id="burger" aria-label="Открыть меню" aria-expanded="false"><i></i><i></i></button>
+  </div>
+</header>
+<div class="menu" id="menu">
+  <a href="#services"><span class="num">01</span>Услуги</a>
+  <a href="#process"><span class="num">02</span>Процесс</a>
+  <a href="#advantages"><span class="num">03</span>Преимущества</a>
+  <a href="#geo"><span class="num">04</span>География</a>
+  <a href="#calc"><span class="num">05</span>Расчёт</a>
+  <a href="#contacts"><span class="num">06</span>Контакты</a>
+</div>
+
+<!-- ================= HERO ================= -->
+<section class="hero" id="top">
+  <div class="globe-wrap" aria-hidden="true">
+    <canvas class="globe-canvas" id="globeCanvas"></canvas>
+  </div>
+
+  <div class="hero__copy">
+    <p class="eyebrow rv">Международная логистика · Варшава</p>
+    <h1 class="split" id="heroTitle">Из Китая, ЕС и&nbsp;Турции — <em>до вашей двери</em></h1>
+    <p class="hero__sub rv d2">WWK Fast — грузовые перевозки автотранспортом, железнодорожные, авиа&nbsp;и морем. <b>20&nbsp;000 отправлений в&nbsp;год</b>: таможенное оформление, складская логистика и закупка товаров под ключ.</p>
+    <div class="hero__actions rv d3">
+      <a class="btn btn--primary" href="#calc">Рассчитать доставку
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+      </a>
+      <a class="btn btn--ghost" href="#services">Наши услуги</a>
+    </div>
+    <div class="hero__stats rv d4">
+      <div class="stat"><span class="stat__num"><span data-count="20000" data-fmt="space">0</span><i>+</i></span><span class="stat__label">отправлений в год</span></div>
+      <div class="stat"><span class="stat__num"><span data-count="2019">0</span></span><span class="stat__label">на рынке с</span></div>
+      <div class="stat"><span class="stat__num"><span data-count="4">0</span></span><span class="stat__label">вида транспорта</span></div>
+      <div class="stat"><span class="stat__num"><span data-count="7">0</span><i>&nbsp;дн</i></span><span class="stat__label">самая быстрая доставка</span></div>
+    </div>
+  </div>
+
+  <div class="hero__stage" id="globeStage" role="group" aria-label="Интерактивный 3D-глобус с маршрутами поставок. Потяните, чтобы вращать.">
+    <div class="globe-label" data-city="warsaw">Варшава</div>
+    <div class="globe-label" data-city="shenzhen" data-pos="below">Шэньчжэнь</div>
+    <div class="globe-label" data-city="istanbul" data-pos="below">Стамбул</div>
+    <div class="globe-label" data-city="moscow" data-pos="right">Москва</div>
+    <div class="globe-label" data-city="shanghai">Шанхай</div>
+    <div class="globe-label" data-city="chengdu" data-pos="left">Чэнду</div>
+    <div class="globe-label" data-city="madrid" data-pos="left">Мадрид</div>
+  </div>
+
+  <p class="hero__hint">потяните глобус</p>
+</section>
+
+<!-- ================= MARQUEE ================= -->
+<div class="marquee" aria-hidden="true">
+  <div class="marquee__track" id="marqueeTrack"></div>
+</div>
+
+<!-- ================= SERVICES ================= -->
+<section class="block services" id="services">
+  <div class="container">
+    <div class="sec-head rv">
+      <h2>Четыре способа доставить ваш груз</h2>
+      <span class="idx">[ 01 ] — <b>Услуги</b></span>
+    </div>
+    <div class="svc-grid">
+      <article class="svc rv">
+        <p class="svc__num">01 / 04</p>
+        <div class="svc__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M1 5h13v11H1zM14 9h4l3 3.5V16h-7"/><circle cx="5.5" cy="18.5" r="2"/><circle cx="17.5" cy="18.5" r="2"/></svg></div>
+        <h3>Автотранспорт</h3>
+        <p class="svc__time">17–25 дней</p>
+        <p>Регулярные поставки сборных и полных партий — от детских игрушек до бытовой техники. Доставка дверь в дверь.</p>
+      </article>
+      <article class="svc rv d1">
+        <p class="svc__num">02 / 04</p>
+        <div class="svc__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="14" rx="2"/><path d="M4 11h16M9 21l-1-4M15 21l1-4M8 17h8"/></svg></div>
+        <h3>Железная дорога</h3>
+        <p class="svc__time">35–55 дней</p>
+        <p>Оптимальный баланс цены и срока для крупных партий: промышленное оборудование, мебель, стройматериалы.</p>
+      </article>
+      <article class="svc rv d2">
+        <p class="svc__num">03 / 04</p>
+        <div class="svc__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M17.8 19.6 16 11l3.5-3.5a2.1 2.1 0 0 0-3-3L13 8 4.4 6.2a1 1 0 0 0-.95 1.55L6 11l-2.4 1.8a.5.5 0 0 0 .1.85L7 15l1.35 3.3a.5.5 0 0 0 .85.1L10 16l3.25 2.55a1 1 0 0 0 1.55-.95z"/></svg></div>
+        <h3>Авиадоставка</h3>
+        <p class="svc__time">7–12 дней</p>
+        <p>Компактные грузы с высокой стоимостью: смартфоны, ювелирные изделия, товары к началу сезона.</p>
+      </article>
+      <article class="svc rv d3">
+        <p class="svc__num">04 / 04</p>
+        <div class="svc__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 15h18l-2 4H5l-2-4z"/><path d="M5 15V9a7 7 0 0 1 14 0v6M12 2v3"/></svg></div>
+        <h3>Морская доставка</h3>
+        <p class="svc__time">40–55 дней</p>
+        <p>Большие объёмы на дальние расстояния. Минимальная стоимость на единицу груза при полной загрузке.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PROCESS ================= -->
+<section class="block process" id="process">
+  <div class="container">
+    <div class="sec-head rv">
+      <h2>Как проходит доставка</h2>
+      <span class="idx">[ 02 ] — <b>Процесс</b></span>
+    </div>
+    <div class="steps" id="steps">
+      <div class="steps__line" aria-hidden="true"><i class="steps__fill"></i><i class="steps__head"></i></div>
+      <div class="step"><span class="step__dot">01</span><div><h3>Заявка</h3><p>Маршрут, вес, объём и тип груза — по почте, телефону или через расчёт на сайте.</p></div></div>
+      <div class="step"><span class="step__dot">02</span><div><h3>Расчёт и договор</h3><p>Подбираем вид транспорта и схему доставки, фиксируем срок и стоимость.</p></div></div>
+      <div class="step"><span class="step__dot">03</span><div><h3>Забор и консолидация</h3><p>Забираем груз у поставщика, собираем партию на складе в Евросоюзе.</p></div></div>
+      <div class="step"><span class="step__dot">04</span><div><h3>Таможня</h3><p>Готовим документы, сертификацию и проводим оформление.</p></div></div>
+      <div class="step"><span class="step__dot">05</span><div><h3>Доставка до двери</h3><p>Менеджер держит вас в курсе на каждом этапе пути.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= ADVANTAGES ================= -->
+<section class="block adv" id="advantages">
+  <div class="container">
+    <div class="sec-head rv">
+      <h2>Почему клиенты остаются с нами</h2>
+      <span class="idx">[ 03 ] — <b>Преимущества</b></span>
+    </div>
+    <div class="adv-grid">
+      <div class="adv-cell rv">
+        <span class="k">01 — Сроки</span>
+        <h3>Гарантия времени доставки</h3>
+        <p>Мы доставляем 20 000 отправлений в год и понимаем цену каждого дня: просрочка — это упущенная выгода вашего бизнеса.</p>
+      </div>
+      <div class="adv-cell rv d1">
+        <span class="k">02 — Документы</span>
+        <h3>Таможня под ключ</h3>
+        <p>Полный пакет документов, сертификация и оформление груза на таможне. Страхование и все разрешения на международные перевозки.</p>
+      </div>
+      <div class="adv-cell rv d2">
+        <span class="k">03 — Склад</span>
+        <h3>Складская логистика</h3>
+        <p>Консолидация партий от разных поставщиков, хранение и комплектация перед отправкой — на складах в Евросоюзе.</p>
+      </div>
+      <div class="adv-cell rv d3">
+        <span class="k">04 — Закупка</span>
+        <h3>Финансовая логистика</h3>
+        <p>Найдём производителя, проверим фабрику, выкупим товар и организуем доставку — решение «под ключ» для сложных условий.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= GEOGRAPHY ================= -->
+<section class="block" id="geo">
+  <div class="container">
+    <div class="sec-head rv">
+      <h2>Основные направления</h2>
+      <span class="idx">[ 04 ] — <b>География</b></span>
+    </div>
+    <div class="lanes">
+      <div class="lane rv">
+        <span class="lane__idx">01</span>
+        <div class="lane__route">Китай <i>→</i> Россия · Беларусь</div>
+        <div class="lane__modes"><span>Море</span><span>Ж/Д</span><span>Авто</span><span>Авиа</span></div>
+        <div class="lane__time">от <b>7</b> до 55 дней</div>
+      </div>
+      <div class="lane rv d1">
+        <span class="lane__idx">02</span>
+        <div class="lane__route">Евросоюз <i>→</i> Россия · Беларусь</div>
+        <div class="lane__modes"><span>Авто</span><span>Авиа</span></div>
+        <div class="lane__time">от <b>7</b> до 25 дней</div>
+      </div>
+      <div class="lane rv d2">
+        <span class="lane__idx">03</span>
+        <div class="lane__route">Турция <i>→</i> Россия · Беларусь</div>
+        <div class="lane__modes"><span>Авто</span><span>Море</span></div>
+        <div class="lane__time">от <b>17</b> до 55 дней</div>
+      </div>
+      <div class="lane rv d3">
+        <span class="lane__idx">04</span>
+        <div class="lane__route">Внутри ЕС</div>
+        <div class="lane__modes"><span>Авто</span><span>Курьер</span></div>
+        <div class="lane__time">от <b>1</b> дня</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CALC ================= -->
+<section class="block calc" id="calc">
+  <div class="container">
+    <div class="sec-head rv">
+      <h2>Рассчитайте срок доставки</h2>
+      <span class="idx">[ 05 ] — <b>Расчёт</b></span>
+    </div>
+    <div class="calc-grid rv d1">
+      <form class="calc-panel" id="calcForm" onsubmit="return false">
+        <div class="field">
+          <p class="field__lbl">Откуда</p>
+          <div class="seg" data-name="from">
+            <button type="button" data-v="cn" aria-pressed="true">Китай</button>
+            <button type="button" data-v="eu" aria-pressed="false">Евросоюз</button>
+            <button type="button" data-v="tr" aria-pressed="false">Турция</button>
+          </div>
+        </div>
+        <div class="field">
+          <p class="field__lbl">Куда</p>
+          <div class="seg" data-name="to">
+            <button type="button" data-v="ru" aria-pressed="true">Россия</button>
+            <button type="button" data-v="by" aria-pressed="false">Беларусь</button>
+          </div>
+        </div>
+        <div class="field">
+          <p class="field__lbl">Транспорт</p>
+          <div class="seg seg--mode" data-name="mode">
+            <button type="button" data-v="auto" aria-pressed="true">Авто</button>
+            <button type="button" data-v="rail" aria-pressed="false">Ж/д</button>
+            <button type="button" data-v="air" aria-pressed="false">Авиа</button>
+            <button type="button" data-v="sea" aria-pressed="false">Море</button>
+          </div>
+        </div>
+        <div class="field field--last">
+          <p class="field__lbl">Параметры груза <span>— по желанию</span></p>
+          <div class="inputs">
+            <label class="inp"><input id="calcW" type="number" inputmode="decimal" min="0" placeholder="Вес" aria-label="Вес, кг"><span>кг</span></label>
+            <label class="inp"><input id="calcV" type="number" inputmode="decimal" min="0" step="0.1" placeholder="Объём" aria-label="Объём, м³"><span>м³</span></label>
+          </div>
+        </div>
+      </form>
+      <div class="calc-result" aria-live="polite">
+        <div class="res__route"><span id="resFrom">Китай</span><span class="res__line"><i></i></span><span id="resTo">Россия</span></div>
+        <p class="res__lbl">Ориентировочный срок в пути</p>
+        <p class="res__days"><span id="resDays">17–25</span><small>дней</small></p>
+        <ul class="res__list" id="resList"></ul>
+        <a class="btn btn--primary" id="resCta" href="mailto:sales@wwkfast.com">Запросить стоимость
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+        </a>
+        <p class="res__note">Стоимость зависит от груза и сезона — менеджер пришлёт точный расчёт в течение рабочего дня.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= CONTACTS ================= -->
+<section class="block contact" id="contacts">
+  <div class="container">
+    <div class="contact-grid">
+      <div class="rv">
+        <img class="contact__logo" src="assets/logo-light.png" alt="WWK FAST — Transportation &amp; Freight Forwarding" width="199" height="130">
+        <h2>Обсудим <em>ваш груз?</em></h2>
+        <p class="contact__sub">Пришлите маршрут и параметры груза — персональный менеджер вернётся с расчётом и оптимальной схемой доставки в течение рабочего дня.</p>
+        <a class="btn btn--primary" href="mailto:sales@wwkfast.com">Написать на почту
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M9 7h8v8"/></svg>
+        </a>
+      </div>
+      <div class="contact-rows rv d1">
+        <div class="crow">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 2 .7 2.9a2 2 0 0 1-.5 2.1L8.1 10a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.5c.9.3 1.9.6 2.9.7a2 2 0 0 1 1.7 2z"/></svg></div>
+          <div><p class="lbl">Телефон</p><a class="val" href="tel:+48739263210">+48 739 26 32 10</a></div>
+        </div>
+        <div class="crow">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg></div>
+          <div><p class="lbl">Почта</p><a class="val" href="mailto:sales@wwkfast.com">sales@wwkfast.com</a></div>
+        </div>
+        <div class="crow">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+          <div><p class="lbl">Офис</p><span class="val">Варшава, ul. Olesińska 21, lok. 309</span></div>
+        </div>
+        <div class="crow">
+          <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+          <div><p class="lbl">Режим</p><span class="val">Пн–Пт, 9:00–18:00 CET</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="foot">
+    <div class="foot__brand"><img class="foot__logo" src="assets/logo.png" alt="WWK FAST" width="98" height="64">
+    <p class="foot__legal">WWK FAST sp. z o.o. · ul. Olesińska 21/309, 02-548 Warszawa, Polska<br>KRS 0000781287 · NIP 1231434006 · REGON 383073166</p></div>
+    <a class="foot__up" href="#top">Наверх ↑</a>
+  </div>
+</footer>
+
+<script>
+/* ================= UI: nav, menu, marquee, reveals, counters ================= */
+(function(){
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var nav = document.getElementById('nav');
+  var bar = document.getElementById('progress');
+
+  var burger = document.getElementById('burger'), menu = document.getElementById('menu');
+  var toggleMenu = function(open){
+    menu.classList.toggle('open', open);
+    burger.setAttribute('aria-expanded', open);
+    document.body.style.overflow = open ? 'hidden' : '';
+  };
+  burger.addEventListener('click', function(){ toggleMenu(!menu.classList.contains('open')); });
+  menu.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ toggleMenu(false); }); });
+
+  /* marquee: drifts on its own, speeds up and leans with scroll velocity */
+  var cities = ['Варшава','Шэньчжэнь','Шанхай','Чэнду','Стамбул','Роттердам','Гамбург','Милан','Москва','Минск','Санкт-Петербург','Алматы'];
+  var track = document.getElementById('marqueeTrack');
+  var half = document.createElement('div');
+  half.style.display = 'flex';
+  cities.forEach(function(c){
+    var s = document.createElement('span'); s.innerHTML = c + ' <b>·</b>';
+    half.appendChild(s);
+  });
+  track.appendChild(half);
+  track.appendChild(half.cloneNode(true));
+
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('is-in'); io.unobserve(e.target); }
+    });
+  }, {threshold:.15});
+  document.querySelectorAll('.rv').forEach(function(el){ io.observe(el); });
+
+  /* hero title: split into words that rise out of a mask */
+  (function(){
+    var h = document.getElementById('heroTitle'), i = 0;
+    function walk(node){
+      Array.prototype.slice.call(node.childNodes).forEach(function(n){
+        if (n.nodeType === 3){
+          var frag = document.createDocumentFragment();
+          n.textContent.split(/( )/).forEach(function(part){
+            if (part === ' '){ frag.appendChild(document.createTextNode(' ')); return; }
+            if (!part) return;
+            var w = document.createElement('span'); w.className = 'w';
+            var wi = document.createElement('span'); wi.className = 'wi'; wi.style.setProperty('--i', i++);
+            wi.textContent = part; w.appendChild(wi); frag.appendChild(w);
+          });
+          n.parentNode.replaceChild(frag, n);
+        } else if (n.nodeType === 1) walk(n);
+      });
+    }
+    walk(h);
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){ h.classList.add('is-in'); }); });
+  })();
+
+  /* background particles: drift up, and fly up faster while scrolling */
+  var pfx = document.getElementById('pfx'), pctx = pfx.getContext('2d'), parts = [], pW = 0, pH = 0, pDpr = 1;
+  function sizePfx(){
+    pDpr = Math.min(2, devicePixelRatio || 1); pW = innerWidth; pH = innerHeight;
+    pfx.width = pW * pDpr; pfx.height = pH * pDpr;
+    pctx.setTransform(pDpr, 0, 0, pDpr, 0, 0);
+    var n = pW < 700 ? 38 : 72;
+    while (parts.length < n) parts.push(mkPart(true));
+    parts.length = n;
+  }
+  function mkPart(anywhere){
+    var z = 0.25 + Math.random() * 0.75, red = Math.random() < 0.3;
+    return { x: Math.random() * pW, y: anywhere ? Math.random() * pH : pH + 10, z: z,
+      r: (0.7 + Math.random() * 1.9) * (0.6 + z * 0.6), red: red,
+      a: red ? 0.28 + z * 0.4 : 0.12 + z * 0.22, ph: Math.random() * 6.28, sp: 6 + Math.random() * 14 };
+  }
+  addEventListener('resize', sizePfx); sizePfx();
+  var pT = 0;
+  function drawParticles(dt, vel){
+    pT += dt;
+    pctx.clearRect(0, 0, pW, pH);
+    var boost = Math.min(Math.abs(vel) * 55, 2600);
+    for (var i = 0; i < parts.length; i++){
+      var p = parts[i];
+      p.y -= (p.sp + boost) * p.z * dt;
+      var x = p.x + Math.sin(pT * 0.4 + p.ph) * 14 * p.z;
+      if (p.y < -12){ parts[i] = mkPart(false); continue; }
+      var stretch = Math.min(18, boost * p.z * 0.012);
+      pctx.globalAlpha = p.a;
+      pctx.fillStyle = p.red ? '#e3262a' : '#3a3e44';
+      if (stretch > 1.2){
+        pctx.beginPath(); pctx.ellipse(x, p.y + stretch / 2, p.r * 0.8, p.r + stretch, 0, 0, 6.2832); pctx.fill();
+      } else {
+        pctx.beginPath(); pctx.arc(x, p.y, p.r, 0, 6.2832); pctx.fill();
+      }
+    }
+    pctx.globalAlpha = 1;
+  }
+
+  var cio = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(!e.isIntersecting) return;
+      cio.unobserve(e.target);
+      var el = e.target, target = +el.dataset.count, fmt = el.dataset.fmt,
+          t0 = null, dur = 1600;
+      var step = function(t){
+        if(!t0) t0 = t;
+        var p = Math.min(1, (t - t0) / dur), ease = 1 - Math.pow(1 - p, 3),
+            v = Math.round(target * ease);
+        el.textContent = fmt === 'space' ? v.toLocaleString('ru-RU') : String(v);
+        if(p < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    });
+  }, {threshold:.6});
+  document.querySelectorAll('[data-count]').forEach(function(el){ cio.observe(el); });
+
+  /* ---------- scroll route: a shipment line that travels down the page ---------- */
+  var svg = document.getElementById('routeSvg');
+  var NS = 'http://www.w3.org/2000/svg';
+  var trackP = svg.querySelector('.route-track'), progP = svg.querySelector('.route-prog');
+  var head = svg.querySelector('.route-head'), pin = svg.querySelector('.route-pin');
+  var cpG = svg.querySelector('.route-cps');
+  var samples = [], cps = [], total = 0, headLen = 0, built = false;
+  var sectionIds = ['services','process','advantages','geo','calc'];
+
+  function absTop(el){ return el.getBoundingClientRect().top + scrollY; }
+  function buildRoute(){
+    var W = document.documentElement.clientWidth;
+    var docH = document.documentElement.scrollHeight;
+    var secs = sectionIds.map(function(id){ return document.getElementById(id); });
+    var contact = document.getElementById('contacts');
+    var pad = parseFloat(getComputedStyle(secs[0]).paddingLeft) || 20;
+    var gutter = Math.max(pad, (W - 1280) / 2);
+    var xs = [gutter / 2, W - gutter / 2];
+    svg.setAttribute('viewBox', '0 0 ' + W + ' ' + docH);
+    svg.style.height = docH + 'px';
+    var side = 0, cpPts = [];
+    var y0 = absTop(secs[0]) + 10;
+    var d = 'M' + xs[side] + ' ' + y0;
+    cpPts.push([xs[side], y0]);
+    for (var i = 1; i < secs.length; i++){
+      var pt = parseFloat(getComputedStyle(secs[i]).paddingTop) || 90;
+      var y = absTop(secs[i]) + Math.min(pt * 0.45, 64);
+      var a = xs[side], b = xs[1 - side];
+      d += ' L' + a + ' ' + (y - 36) + ' C' + a + ' ' + y + ' ' + b + ' ' + y + ' ' + b + ' ' + (y + 36);
+      side = 1 - side;
+      cpPts.push([b, y + 36]);
+    }
+    var yEnd = absTop(contact) - 22;
+    d += ' L' + xs[side] + ' ' + yEnd;
+    trackP.setAttribute('d', d); progP.setAttribute('d', d);
+    total = progP.getTotalLength();
+    progP.style.strokeDasharray = total + ' ' + total;
+    pin.setAttribute('transform', 'translate(' + xs[side] + ' ' + yEnd + ')');
+    samples = [];
+    for (var l = 0; l <= total; l += 8){ var p = progP.getPointAtLength(l); samples.push([l, p.y, p.x]); }
+    samples.push([total, yEnd, xs[side]]);
+    cpG.innerHTML = ''; cps = [];
+    cpPts.forEach(function(c){
+      var circ = document.createElementNS(NS, 'circle');
+      circ.setAttribute('cx', c[0]); circ.setAttribute('cy', c[1]); circ.setAttribute('r', 5);
+      circ.setAttribute('class', 'route-cp');
+      cpG.appendChild(circ);
+      var best = 0;
+      for (var k = 0; k < samples.length; k++){ if (samples[k][1] <= c[1] + 0.5) best = samples[k][0]; else break; }
+      cps.push({ el: circ, len: best });
+    });
+    built = true;
+  }
+  function lenAtY(y){
+    var lo = 0, hi = samples.length - 1;
+    if (!samples.length || y <= samples[0][1]) return 0;
+    if (y >= samples[hi][1]) return total;
+    while (hi - lo > 1){ var mid = (lo + hi) >> 1; if (samples[mid][1] < y) lo = mid; else hi = mid; }
+    return samples[hi][0];
+  }
+  var rebuildT;
+  function scheduleBuild(){ clearTimeout(rebuildT); rebuildT = setTimeout(buildRoute, 120); }
+  addEventListener('resize', scheduleBuild);
+  addEventListener('load', buildRoute);
+  document.fonts && document.fonts.ready.then(scheduleBuild);
+  new ResizeObserver(scheduleBuild).observe(document.body);
+
+  /* ---------- process steps ---------- */
+  var stepsEl = document.getElementById('steps');
+  var stepEls = Array.from(stepsEl.querySelectorAll('.step'));
+  function updateSteps(vh){
+    var r = stepsEl.getBoundingClientRect();
+    var vertical = matchMedia('(max-width:900px)').matches;
+    var span = vertical ? Math.max(r.height, 1) : vh * 0.4;
+    var p = Math.max(0, Math.min(1, (vh * 0.78 - r.top) / span));
+    stepsEl.style.setProperty('--p', p.toFixed(4));
+    stepEls.forEach(function(s, i){ s.classList.toggle('is-on', p >= i / (stepEls.length - 1) - 0.02); });
+  }
+
+  /* ---------- one loop for scroll-linked effects ---------- */
+  var lastY = scrollY, vel = 0, mx = 0, last = performance.now();
+  function frame(now){
+    var dt = Math.min(0.05, (now - last) / 1000); last = now;
+    var y = scrollY, vh = innerHeight, docH = document.documentElement.scrollHeight;
+    var dy = y - lastY; lastY = y;
+    vel += (dy - vel) * 0.2;
+    nav.classList.toggle('is-scrolled', y > 40);
+    bar.style.transform = 'scaleX(' + (y / Math.max(1, docH - vh)).toFixed(4) + ')';
+
+    if (!reduce){
+      var halfW = track.scrollWidth / 2;
+      mx -= (40 + Math.min(Math.abs(vel) * 18, 900)) * dt;
+      if (halfW && -mx >= halfW) mx += halfW;
+      var skew = Math.max(-8, Math.min(8, -vel * 0.35));
+      track.style.transform = 'translate3d(' + mx.toFixed(1) + 'px,0,0) skewX(' + skew.toFixed(2) + 'deg)';
+    }
+
+    if (built){
+      var target = lenAtY(y + vh * 0.62);
+      headLen += (target - headLen) * (reduce ? 1 : Math.min(1, dt * 7));
+      progP.style.strokeDashoffset = (total - headLen).toFixed(1);
+      var p = progP.getPointAtLength(Math.max(0, headLen));
+      head.setAttribute('transform', 'translate(' + p.x.toFixed(1) + ' ' + p.y.toFixed(1) + ')');
+      head.style.opacity = headLen > 1 ? 1 : 0;
+      cps.forEach(function(c){ c.el.classList.toggle('is-on', headLen >= c.len - 2); });
+      pin.classList.toggle('is-on', headLen >= total - 2);
+    }
+    updateSteps(vh);
+    if (!reduce && !document.hidden) drawParticles(dt, vel);
+    requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+
+  /* ---------- delivery-time estimator ---------- */
+  var MODES = {
+    auto: { name:'Авто', days:'17–25', note:'Сборные и полные партии, доставка дверь в дверь' },
+    rail: { name:'Ж/д',  days:'35–55', note:'Крупные партии: оборудование, мебель, стройматериалы' },
+    air:  { name:'Авиа', days:'7–12',  note:'Компактные и дорогие грузы, товары к началу сезона' },
+    sea:  { name:'Море', days:'40–55', note:'Большие объёмы и минимальная цена за единицу груза' }
+  };
+  var ALLOWED = { cn:['sea','rail','auto','air'], eu:['auto','air'], tr:['auto','sea'] };
+  var NAMES = { cn:'Китай', eu:'Евросоюз', tr:'Турция', ru:'Россия', by:'Беларусь' };
+  var state = { from:'cn', to:'ru', mode:'auto' };
+  var form = document.getElementById('calcForm');
+  function setPressed(name, val){
+    form.querySelectorAll('.seg[data-name="' + name + '"] button').forEach(function(b){ b.setAttribute('aria-pressed', b.dataset.v === val); });
+  }
+  function render(){
+    var allowed = ALLOWED[state.from];
+    form.querySelectorAll('.seg[data-name="mode"] button').forEach(function(b){ b.disabled = allowed.indexOf(b.dataset.v) < 0; });
+    if (allowed.indexOf(state.mode) < 0) state.mode = allowed[0];
+    ['from','to','mode'].forEach(function(n){ setPressed(n, state[n]); });
+    var m = MODES[state.mode];
+    document.getElementById('resFrom').textContent = NAMES[state.from];
+    document.getElementById('resTo').textContent = NAMES[state.to];
+    var daysEl = document.getElementById('resDays');
+    daysEl.textContent = m.days;
+    daysEl.parentNode.classList.remove('is-flip'); void daysEl.offsetWidth; daysEl.parentNode.classList.add('is-flip');
+    document.getElementById('resList').innerHTML =
+      '<li>' + m.note + '</li><li>Таможенное оформление и документы</li><li>Персональный менеджер на всём пути</li>';
+    var w = document.getElementById('calcW').value, vol = document.getElementById('calcV').value;
+    var body = 'Здравствуйте! Прошу рассчитать стоимость доставки.\n\nМаршрут: ' + NAMES[state.from] + ' → ' + NAMES[state.to] +
+      '\nТранспорт: ' + m.name + (w ? '\nВес: ' + w + ' кг' : '') + (vol ? '\nОбъём: ' + vol + ' м³' : '') + '\n\nТип груза: \nКонтакт для связи: ';
+    document.getElementById('resCta').href = 'mailto:sales@wwkfast.com?subject=' +
+      encodeURIComponent('Расчёт доставки: ' + NAMES[state.from] + ' → ' + NAMES[state.to] + ', ' + m.name) + '&body=' + encodeURIComponent(body);
+  }
+  form.addEventListener('click', function(e){
+    var b = e.target.closest('.seg button'); if (!b || b.disabled) return;
+    state[b.parentNode.dataset.name] = b.dataset.v; render();
+  });
+  form.addEventListener('input', render);
+  render();
+})();
+</script>
+
+<script type="module">
+/* ================= 3D globe ================= */
+import * as THREE from 'three';
+
+(function(){
+  var hero = document.querySelector('.hero');
+  var canvas = document.getElementById('globeCanvas');
+  var stage = document.getElementById('globeStage');
+  var labels = Array.from(document.querySelectorAll('.globe-label'));
+  var reduce = matchMedia('(prefers-reduced-motion: reduce)');
+  var narrow = matchMedia('(max-width:900px)');
+
+  var renderer;
+  try {
+    renderer = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true, powerPreference: 'high-performance' });
+  } catch (e) { return; }
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
+  renderer.setClearColor(0x000000, 0);
+
+  var scene = new THREE.Scene();
+  var camera = new THREE.PerspectiveCamera(34, 1, 0.1, 50);
+  var world = new THREE.Group();
+  scene.add(world);
+
+  var ACCENT = 0xe3262a, INK = 0x1b1d20;
+
+  /* ---- soft red halo: red → transparent around the sphere ---- */
+  (function(){
+    var c = document.createElement('canvas'); c.width = c.height = 512;
+    var g = c.getContext('2d');
+    var gr = g.createRadialGradient(256, 256, 0, 256, 256, 256);
+    /* rim of the sphere sits at r = 1/1.75 ≈ 0.571 of the sprite */
+    gr.addColorStop(0.00, 'rgba(227,38,42,0.24)');
+    gr.addColorStop(0.20, 'rgba(232,66,60,0.16)');
+    gr.addColorStop(0.38, 'rgba(242,128,116,0.09)');
+    gr.addColorStop(0.50, 'rgba(248,182,172,0.07)');
+    gr.addColorStop(0.565,'rgba(227,38,42,0.17)');
+    gr.addColorStop(0.60, 'rgba(227,38,42,0.10)');
+    gr.addColorStop(0.70, 'rgba(227,38,42,0.04)');
+    gr.addColorStop(0.84, 'rgba(227,38,42,0.012)');
+    gr.addColorStop(1.00, 'rgba(227,38,42,0)');
+    g.fillStyle = gr; g.fillRect(0, 0, 512, 512);
+    var tex = new THREE.CanvasTexture(c);
+    tex.colorSpace = THREE.SRGBColorSpace;
+    var halo = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex, transparent: true, depthWrite: false, depthTest: false }));
+    halo.scale.set(3.5, 3.5, 1);
+    halo.renderOrder = -1;
+    scene.add(halo);
+    window.__halo = halo;
+  })();
+  var halo = window.__halo;
+
+  /* ---- cities ---- */
+  function v(lat, lng, r){
+    var phi = (90 - lat) * Math.PI / 180, theta = (lng + 180) * Math.PI / 180;
+    return new THREE.Vector3(
+      -(r * Math.sin(phi) * Math.cos(theta)),
+      r * Math.cos(phi),
+      r * Math.sin(phi) * Math.sin(theta)
+    );
+  }
+  var CITIES = {
+    warsaw:     { ll:[52.23, 21.01], hub:2 },
+    shenzhen:   { ll:[22.54,114.06], hub:1 },
+    shanghai:   { ll:[31.23,121.47], hub:1 },
+    beijing:    { ll:[39.90,116.40] },
+    chengdu:    { ll:[30.57,104.07], hub:1 },
+    istanbul:   { ll:[41.01, 28.98], hub:1 },
+    hamburg:    { ll:[53.55,  9.99] },
+    rotterdam:  { ll:[51.92,  4.48], hub:1 },
+    milan:      { ll:[45.46,  9.19] },
+    madrid:     { ll:[40.42, -3.70] },
+    moscow:     { ll:[55.76, 37.62], hub:1 },
+    spb:        { ll:[59.93, 30.34] },
+    minsk:      { ll:[53.90, 27.56] },
+    kazan:      { ll:[55.79, 49.12] },
+    ekb:        { ll:[56.84, 60.60] },
+    novosibirsk:{ ll:[55.03, 82.92] },
+    almaty:     { ll:[43.24, 76.89] }
+  };
+  Object.keys(CITIES).forEach(function(k){ var c = CITIES[k]; c.pos = v(c.ll[0], c.ll[1], 1.012); });
+
+  /* great-circle arcs (air / road / rail lanes) */
+  var ROUTES = [
+    ['shenzhen','warsaw'], ['shanghai','hamburg'], ['beijing','moscow'],
+    ['istanbul','warsaw'], ['istanbul','moscow'], ['hamburg','warsaw'],
+    ['milan','warsaw'], ['madrid','warsaw'], ['warsaw','moscow'],
+    ['warsaw','minsk'], ['warsaw','spb'], ['moscow','kazan'],
+    ['moscow','ekb'], ['moscow','novosibirsk'], ['almaty','moscow']
+  ];
+  /* surface corridors: sea lane via Suez and the China–Europe rail corridor */
+  var LANES = [
+    { color: INK, opacity: .55, speed: .022, pts: [[31.23,121.47],[22.3,116],[1.3,104.1],[5.8,80.5],[12.6,45.0],[27.8,34.2],[31.3,32.3],[35.9,14.5],[36.0,-5.6],[43.5,-9.6],[48.6,-5.2],[51.92,4.48]] },
+    { color: ACCENT, opacity: .7, speed: .035, pts: [[30.57,104.07],[34.34,108.94],[36.06,103.83],[43.83,87.62],[44.21,80.42],[51.17,71.43],[53.20,50.15],[53.90,27.56],[52.08,23.65],[52.23,21.01]] }
+  ];
+
+  /* ---- occluder sphere ---- */
+  world.add(new THREE.Mesh(
+    new THREE.SphereGeometry(0.985, 64, 64),
+    new THREE.MeshBasicMaterial({ colorWrite: false })
+  ));
+
+  function slerp(a, b, t){
+    var dot = Math.min(1, Math.max(-1, a.x*b.x + a.y*b.y + a.z*b.z));
+    var ang = Math.acos(dot);
+    if (ang < 1e-6) return a.clone();
+    var s = Math.sin(ang);
+    var w1 = Math.sin((1-t)*ang)/s, w2 = Math.sin(t*ang)/s;
+    return new THREE.Vector3(a.x*w1+b.x*w2, a.y*w1+b.y*w2, a.z*w1+b.z*w2);
+  }
+  function buildPoints(positions, size, color, opacity){
+    var g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    return new THREE.Points(g, new THREE.PointsMaterial({
+      size: size, color: color, transparent: true, opacity: opacity,
+      sizeAttenuation: true, depthWrite: false
+    }));
+  }
+
+  /* twinkling red sparks scattered over land */
+  var sparkU = { uTime:{value:0}, uSize:{value:0.026}, uScale:{value:400} };
+  function buildSparks(positions){
+    var g = new THREE.BufferGeometry();
+    var phase = new Float32Array(positions.length / 3);
+    for (var i = 0; i < phase.length; i++) phase[i] = Math.random();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    g.setAttribute('aPhase', new THREE.BufferAttribute(phase, 1));
+    return new THREE.Points(g, new THREE.ShaderMaterial({
+      uniforms: sparkU, transparent: true, depthWrite: false,
+      vertexShader: [
+        'attribute float aPhase; uniform float uTime, uSize, uScale; varying float vA;',
+        'void main(){',
+        '  vec4 mv = modelViewMatrix * vec4(position, 1.0);',
+        '  gl_Position = projectionMatrix * mv;',
+        '  float t = 0.5 + 0.5 * sin(uTime * (0.8 + aPhase) + aPhase * 6.2831);',
+        '  vA = pow(t, 8.0);',
+        '  gl_PointSize = uSize * uScale / -mv.z * (0.6 + 0.7 * vA);',
+        '}'].join('\n'),
+      fragmentShader: [
+        'varying float vA;',
+        'void main(){',
+        '  float d = length(gl_PointCoord - 0.5);',
+        '  if (d > 0.5) discard;',
+        '  gl_FragColor = vec4(0.89, 0.15, 0.16, smoothstep(0.5, 0.05, d) * vA);',
+        '}'].join('\n')
+    }));
+  }
+
+  var movers = [], rings = [], arcs = [], ready = false, readyAt = 0, built = false;
+
+  function addRing(pos, size, delay){
+    var n = pos.clone().normalize();
+    var m = new THREE.Mesh(
+      new THREE.RingGeometry(size, size * 1.32, 48),
+      new THREE.MeshBasicMaterial({ color: ACCENT, transparent: true, opacity: 0, side: THREE.DoubleSide, depthWrite: false })
+    );
+    m.position.copy(n.clone().multiplyScalar(1.004));
+    m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), n);
+    m.userData.delay = delay;
+    world.add(m); rings.push(m);
+  }
+
+  function buildWorld(land){
+    if (built) return;
+    built = true;
+    var N = 42000, landPos = [], oceanPos = [], sparkPos = [];
+    for (var i = 0; i < N; i++){
+      var y = 1 - (i / (N - 1)) * 2;
+      var rad = Math.sqrt(1 - y*y);
+      var th = i * 2.399963229728653;
+      var x = Math.cos(th)*rad, z = Math.sin(th)*rad;
+      var isLand = true;
+      if (land){
+        var lat = Math.asin(y) * 180/Math.PI;
+        var lng = Math.atan2(-z, x) * 180/Math.PI;
+        var u = (lng + 180) / 360, vv = (90 - lat) / 180;
+        var px = Math.min(land.w-1, Math.floor(u * land.w));
+        var py = Math.min(land.h-1, Math.floor(vv * land.h));
+        isLand = land.data[(py*land.w + px)*4] < 10;
+      }
+      if (isLand){
+        landPos.push(x, y, z);
+        if (land && Math.random() < 0.035) sparkPos.push(x*1.002, y*1.002, z*1.002);
+      } else oceanPos.push(x, y, z);
+    }
+    if (landPos.length) world.add(buildPoints(landPos, 0.0142, 0x1f2226, 0.9));
+    if (oceanPos.length) world.add(buildPoints(oceanPos, 0.0052, 0xb98f8c, 0.26));
+    if (sparkPos.length) world.add(buildSparks(sparkPos));
+
+    /* arcs: draw in, land with a ring, retract (GitHub-globe style) */
+    ROUTES.forEach(function(r, idx){
+      var a = CITIES[r[0]].pos.clone().normalize(), b = CITIES[r[1]].pos.clone().normalize();
+      var ang = a.angleTo(b), pts = [];
+      for (var i = 0; i <= 64; i++){
+        var t = i / 64, p = slerp(a, b, t);
+        p.multiplyScalar(1 + 0.18 * (ang/Math.PI) * Math.sin(Math.PI * t) + 0.012);
+        pts.push(p);
+      }
+      var geo = new THREE.BufferGeometry().setFromPoints(pts);
+      world.add(new THREE.Line(geo, new THREE.LineBasicMaterial({ color: ACCENT, transparent: true, opacity: 0.13, depthWrite: false })));
+      var curve = new THREE.CatmullRomCurve3(pts);
+      var live = new THREE.Mesh(new THREE.TubeGeometry(curve, 64, 0.0042, 6, false),
+        new THREE.MeshBasicMaterial({ color: ACCENT, transparent: true, opacity: 0.95, depthWrite: false }));
+      live.geometry.setDrawRange(0, 0);
+      world.add(live);
+      var head = new THREE.Mesh(new THREE.SphereGeometry(0.013, 10, 10), new THREE.MeshBasicMaterial({ color: ACCENT, transparent: true }));
+      head.visible = false; world.add(head);
+      var n = b.clone();
+      var land = new THREE.Mesh(new THREE.RingGeometry(0.014, 0.019, 40),
+        new THREE.MeshBasicMaterial({ color: ACCENT, transparent: true, opacity: 0, side: THREE.DoubleSide, depthWrite: false }));
+      land.position.copy(n.clone().multiplyScalar(1.005));
+      land.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), n);
+      world.add(land);
+      arcs.push({ live: live, head: head, land: land, pts: pts, delay: 0.5 + idx * 0.23, period: 5.2 + (idx % 4) * 0.55 });
+    });
+
+    /* surface corridors (dashed) */
+    LANES.forEach(function(L, idx){
+      var pts = [];
+      for (var s = 0; s < L.pts.length - 1; s++){
+        var a = v(L.pts[s][0], L.pts[s][1], 1).normalize(), b = v(L.pts[s+1][0], L.pts[s+1][1], 1).normalize();
+        var steps = Math.max(4, Math.round(a.angleTo(b) * 60));
+        for (var i = 0; i < steps; i++) pts.push(slerp(a, b, i / steps).multiplyScalar(1.006));
+      }
+      var e = L.pts[L.pts.length-1]; pts.push(v(e[0], e[1], 1).normalize().multiplyScalar(1.006));
+      var line = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineDashedMaterial({
+        color: L.color, dashSize: 0.014, gapSize: 0.01, transparent: true, opacity: L.opacity, depthWrite: false
+      }));
+      line.computeLineDistances();
+      world.add(line);
+      var dot = new THREE.Mesh(new THREE.SphereGeometry(0.014, 10, 10), new THREE.MeshBasicMaterial({ color: idx ? ACCENT : INK }));
+      dot.userData = { pts: pts, off: idx * 0.5, sp: L.speed };
+      world.add(dot); movers.push(dot);
+    });
+
+    /* city markers + pulsing rings on hubs */
+    Object.keys(CITIES).forEach(function(k, idx){
+      var c = CITIES[k];
+      var m = new THREE.Mesh(
+        new THREE.SphereGeometry(c.hub === 2 ? 0.02 : c.hub ? 0.013 : 0.009, 12, 12),
+        new THREE.MeshBasicMaterial({ color: c.hub ? ACCENT : INK })
+      );
+      m.position.copy(c.pos.clone().normalize().multiplyScalar(1.008));
+      world.add(m);
+      if (c.hub === 2){ addRing(c.pos, 0.02, 0); addRing(c.pos, 0.02, 0.5); }
+    });
+
+    ready = true;
+    readyAt = performance.now();
+    hero.classList.add('is-ready');
+    layout();
+    wake();
+  }
+
+  /* land mask from CDN, graceful fallback to uniform dots */
+  fetch('https://cdn.jsdelivr.net/npm/three-globe@2.42.4/example/img/earth-dark.jpg')
+    .then(function(r){ return r.blob(); })
+    .then(function(blob){
+      if (!window.createImageBitmap) throw 0;
+      return createImageBitmap(blob);
+    })
+    .then(function(bmp){
+      var c = document.createElement('canvas'); c.width = 720; c.height = 360;
+      var ctx = c.getContext('2d', { willReadFrequently: true });
+      ctx.drawImage(bmp, 0, 0, 720, 360);
+      buildWorld({ data: ctx.getImageData(0, 0, 720, 360).data, w: 720, h: 360 });
+    })
+    .catch(function(){ buildWorld(null); });
+  setTimeout(function(){ if (!ready) buildWorld(null); }, 4500);
+
+  /* ---- framing: globe centered on the stage element ---- */
+  var baseDist = 3.2;
+  function layout(){
+    var W = canvas.clientWidth, H = canvas.clientHeight;
+    if (!W || !H) return;
+    var pr = Math.min(window.devicePixelRatio || 1, 2);
+    renderer.setPixelRatio(pr);
+    renderer.setSize(W, H, false);
+    sparkU.uScale.value = H * pr / 2;
+    var c = canvas.getBoundingClientRect();
+    var s = stage.getBoundingClientRect();
+    if (!s.width || !s.height) return;
+    var sx = s.left - c.left + s.width/2, sy = s.top - c.top + s.height/2;
+    camera.aspect = W / H;
+    camera.setViewOffset(W, H, W/2 - sx, H/2 - sy, W, H);
+    var fitPx = (narrow.matches ? 0.86 : 0.86) * Math.min(s.width, s.height);
+    baseDist = Math.sqrt(1 + Math.pow(H / (fitPx * Math.tan(THREE.MathUtils.degToRad(camera.fov/2))), 2));
+    camera.position.set(0, 0, baseDist);
+    camera.updateProjectionMatrix();
+    wake();
+  }
+
+  /* ---- rotation state ---- */
+  var TILT0 = 0.55;
+  var baseY = 3.67, tilt = TILT0, velY = 0, velX = 0;
+  var dragging = false, lastInput = -1e9, swayT = 0, scrollRot = 0, scrollRotT = 0;
+  world.rotation.set(TILT0, baseY, 0);
+
+  function applyDrag(dx, dy){
+    var k = narrow.matches ? 0.0065 : 0.0055;
+    baseY += dx * k;
+    tilt = Math.max(-0.35, Math.min(1.1, tilt + dy * k * 0.7));
+    velY = dx * k; velX = dy * k * 0.7;
+    lastInput = performance.now();
+    wake();
+  }
+
+  /* mouse / pen */
+  var lx = 0, ly = 0;
+  stage.addEventListener('pointerdown', function(e){
+    if (e.pointerType === 'touch') return;
+    if (e.button !== 0) return;
+    dragging = true; lx = e.clientX; ly = e.clientY; velY = velX = 0;
+    stage.setPointerCapture(e.pointerId);
+    stage.classList.add('is-drag');
+  });
+  stage.addEventListener('pointermove', function(e){
+    if (!dragging || e.pointerType === 'touch') return;
+    var dx = e.clientX - lx, dy = e.clientY - ly; lx = e.clientX; ly = e.clientY;
+    applyDrag(dx, dy);
+  });
+  function endMouse(){ if (!dragging) return; dragging = false; stage.classList.remove('is-drag'); lastInput = performance.now(); wake(); }
+  stage.addEventListener('pointerup', endMouse);
+  stage.addEventListener('pointercancel', endMouse);
+
+  /* touch: lock to horizontal drags so vertical swipes still scroll the page */
+  var tx = 0, ty = 0, lock = null;
+  stage.addEventListener('touchstart', function(e){
+    if (e.touches.length !== 1) { lock = 'none'; return; }
+    tx = e.touches[0].clientX; ty = e.touches[0].clientY; lock = null; velY = velX = 0;
+  }, { passive: true });
+  stage.addEventListener('touchmove', function(e){
+    if (lock === 'none' || e.touches.length !== 1) return;
+    var t = e.touches[0], dx = t.clientX - tx, dy = t.clientY - ty;
+    if (lock === null){
+      if (Math.abs(dx) < 6 && Math.abs(dy) < 6) return;
+      lock = Math.abs(dx) > Math.abs(dy) * 0.75 ? 'rotate' : 'none';
+      if (lock === 'none') return;
+      dragging = true; stage.classList.add('is-drag');
+    }
+    e.preventDefault();
+    tx = t.clientX; ty = t.clientY;
+    applyDrag(dx, dy);
+  }, { passive: false });
+  function endTouch(){ if (dragging){ dragging = false; stage.classList.remove('is-drag'); lastInput = performance.now(); wake(); } lock = null; }
+  stage.addEventListener('touchend', endTouch);
+  stage.addEventListener('touchcancel', endTouch);
+
+  /* cursor parallax over the hero (desktop) */
+  var mxT = 0, myT = 0, mxC = 0, myC = 0;
+  hero.addEventListener('pointermove', function(e){
+    if (e.pointerType !== 'mouse' || dragging) return;
+    var r = hero.getBoundingClientRect();
+    mxT = (e.clientX - r.left) / r.width - 0.5; myT = (e.clientY - r.top) / r.height - 0.5;
+    wake();
+  });
+  hero.addEventListener('pointerleave', function(){ mxT = myT = 0; });
+
+  /* scroll: the globe turns a little as you leave the hero */
+  addEventListener('scroll', function(){
+    scrollRotT = Math.min(scrollY, innerHeight * 1.2) * 0.0011;
+    wake();
+  }, { passive: true });
+
+  /* ---- labels ---- */
+  var ANCH = { top:'translate(-50%,-160%)', right:'translate(12px,-50%)', left:'translate(calc(-100% - 12px),-50%)', below:'translate(-50%,60%)' };
+  var tmp = new THREE.Vector3(), camN = new THREE.Vector3();
+  function updateLabels(){
+    if (narrow.matches) return;
+    camN.copy(camera.position).normalize();
+    var cRect = canvas.getBoundingClientRect(), sRect = stage.getBoundingClientRect();
+    var offX = cRect.left - sRect.left, offY = cRect.top - sRect.top;
+    var gate = Math.max(0, Math.min(1, (performance.now() - readyAt - 300) / 500));
+    labels.forEach(function(el){
+      var c = CITIES[el.dataset.city];
+      if (!c || !ready){ el.style.opacity = 0; return; }
+      tmp.copy(c.pos).applyMatrix4(world.matrixWorld);
+      var facing = tmp.clone().normalize().dot(camN);
+      if (facing < 0.42){ el.style.opacity = 0; return; }
+      tmp.project(camera);
+      var x = (tmp.x * 0.5 + 0.5) * canvas.clientWidth + offX;
+      var y = (-tmp.y * 0.5 + 0.5) * canvas.clientHeight + offY;
+      el.style.transform = 'translate(' + x + 'px,' + y + 'px) ' + (ANCH[el.dataset.pos] || ANCH.top);
+      el.style.opacity = Math.max(0, Math.min(1, (facing - 0.42) * 4)) * gate;
+    });
+  }
+
+  /* ---- loop ---- */
+  var raf = 0, visible = true, last = 0, clock = 0;
+  function tick(now){
+    raf = 0;
+    var dt = Math.min(0.05, Math.max(0, (now - last) / 1000)); last = now;
+    var rm = reduce.matches;
+    if (!dragging){
+      var f = Math.pow(0.05, dt);               // frame-rate independent inertia
+      baseY += velY * 60 * dt; velY *= f;
+      tilt = Math.max(-0.35, Math.min(1.1, tilt + velX * 60 * dt)); velX *= f;
+      if (now - lastInput > 2500) tilt += (TILT0 - tilt) * Math.min(1, dt * 1.2);
+      if (!rm) swayT += dt;
+    }
+    scrollRot += (scrollRotT - scrollRot) * Math.min(1, dt * 6);
+    var ip = rm ? 1 : Math.max(0, Math.min(1, (now - readyAt) / 2000)), ie = 1 - Math.pow(1 - ip, 3);
+    mxC += (mxT - mxC) * Math.min(1, dt * 3); myC += (myT - myC) * Math.min(1, dt * 3);
+    world.scale.setScalar(0.72 + 0.28 * ie);
+    halo.scale.setScalar(3.5 * (0.6 + 0.4 * ie));
+    halo.material.opacity = ie;
+    world.rotation.y = baseY + (rm ? 0 : Math.sin(swayT * 0.09) * 0.45) + scrollRot - (1 - ie) * 1.6 + mxC * 0.16;
+    world.rotation.x = tilt + (1 - ie) * 0.35 + myC * 0.1;
+    if (!rm){
+      clock += dt;
+      sparkU.uTime.value = clock;
+      movers.forEach(function(p){
+        var d = p.userData, t = (clock * d.sp + d.off) % 1;
+        p.position.copy(d.pts[Math.floor(t * (d.pts.length - 1))]);
+      });
+      arcs.forEach(function(A){
+        var at = clock - A.delay;
+        if (at < 0){ A.live.geometry.setDrawRange(0, 0); A.head.visible = false; return; }
+        var t = (at % A.period) / A.period, N = A.pts.length, st = 0, en = 0;
+        var ease = function(x){ x = Math.max(0, Math.min(1, x)); return x < .5 ? 4*x*x*x : 1 - Math.pow(-2*x + 2, 3) / 2; };
+        if (t < 0.32){ en = ease(t / 0.32) * N; }
+        else if (t < 0.6){ en = N; }
+        else if (t < 0.9){ en = N; st = ease((t - 0.6) / 0.3) * N; }
+        var SEG = 36, a0 = Math.floor(st * 64 / N), a1 = Math.ceil(en * 64 / N);
+        A.live.geometry.setDrawRange(a0 * SEG, Math.max(0, a1 - a0) * SEG);
+        A.head.visible = t < 0.32 && en > 1;
+        if (A.head.visible) A.head.position.copy(A.pts[Math.min(N - 1, Math.floor(en))]);
+        var lt = (t - 0.3) / 0.32;
+        if (lt > 0 && lt < 1){ A.land.scale.setScalar(1 + lt * 3.2); A.land.material.opacity = 0.75 * (1 - lt); }
+        else A.land.material.opacity = 0;
+      });
+      rings.forEach(function(r){
+        var s = (clock * 0.45 + r.userData.delay) % 1;
+        r.scale.setScalar(1 + s * 2.2);
+        r.material.opacity = 0.5 * (1 - s);
+      });
+    }
+    renderer.render(scene, camera);
+    updateLabels();
+    if (visible && !rm) raf = requestAnimationFrame(tick);
+  }
+  function wake(){
+    if (!raf && visible && ready){ last = performance.now(); raf = requestAnimationFrame(tick); }
+  }
+
+  new IntersectionObserver(function(entries){
+    visible = entries[0].isIntersecting;
+    if (visible) wake();
+  }).observe(hero);
+
+  new ResizeObserver(function(){ layout(); }).observe(canvas);
+  document.fonts && document.fonts.ready.then(function(){ layout(); });
+  reduce.addEventListener && reduce.addEventListener('change', wake);
+})();
+</script>
+<script data-pplx-inline-edit>
+(function () {
+  if (window === window.top) return;
+
+  const allowedParentOrigins = ["https://www.perplexity.ai","https://perplexity.ai","https://testing.perplexity.ai","https://staging.perplexity.ai","https://*.preview.i.perplexity.ai","http://perplexity.localhost","http://localhost:1420","http://127.0.0.1:1420","http://localhost:3000","http://127.0.0.1:3000","http://localhost:5173","http://127.0.0.1:5173"];
+  const MAX_FONT_BYTES = 500 * 1024;
+  const MAX_TOTAL_FONT_BYTES = 2 * 1024 * 1024;
+  const DEFAULT_LINE_HEIGHT = 16;
+  let scrollForwarding = false;
+  let scrollRaf = 0;
+  let trustedTopOrigin = null;
+
+  // Allow entries like "https://*.preview.i.perplexity.ai" — the wildcard
+  // matches a single DNS label (no dots), so "https://*.foo" cannot stretch
+  // across multiple labels.
+  function matchesAllowedOrigin(origin) {
+    if (!origin) return false;
+    for (const entry of allowedParentOrigins) {
+      if (!entry.includes("*")) {
+        if (entry === origin) return true;
+        continue;
+      }
+      const pattern = new RegExp(
+        "^" +
+          entry.replace(/[.+?^${}()|[\]\\]/g, "\\$&").replace(/\*/g, "[^.]+") +
+          "$",
+      );
+      if (pattern.test(origin)) return true;
+    }
+    return false;
+  }
+
+  // Trust decision: when the sender is same-origin-visible (event.origin is a
+  // real origin like https://www.perplexity.ai) we trust event.origin directly.
+  // When event.origin is "null" (opaque broker srcdoc), we fall back to the
+  // broker's stamped `parentOrigin` to identify the top window. The fallback
+  // is claim-only — we rely on the browser's native `targetOrigin` enforcement
+  // on the response path (see postToTrustedTop) to ensure replies can't be
+  // delivered to anyone but the actual top window of that claimed origin.
+  function getTrustedParentOrigin(event) {
+    const forwardedParentOrigin =
+      typeof event.data.parentOrigin === "string" ? event.data.parentOrigin : null;
+    const parentOrigin = event.origin === "null" ? forwardedParentOrigin : event.origin;
+    return matchesAllowedOrigin(parentOrigin) ? parentOrigin : null;
+  }
+
+  // All responses go to window.top with targetOrigin = the allowlisted origin.
+  // An attacker that iframes us inside their own null-origin broker can claim
+  // any parentOrigin they like, but the browser will drop the reply whenever
+  // the real top's origin doesn't match — so the screenshot never leaves.
+  function postToTrustedTop(message) {
+    if (!trustedTopOrigin) return;
+    try {
+      window.top.postMessage(message, trustedTopOrigin);
+    } catch (_error) {}
+  }
+
+  const PICK_CAPABILITIES = ["pick"];
+  const PICK_CHAIN_LENGTH = 4;
+  const PICK_MAX_TEXT_CHARS = 120;
+  const PICK_MAX_HTML_CHARS = 300;
+
+  function truncate(value, maxChars) {
+    return value.length > maxChars ? value.slice(0, maxChars - 1) + "…" : value;
+  }
+
+  function isPickableElement(element) {
+    return (
+      element instanceof Element &&
+      element !== document.documentElement &&
+      element !== document.body
+    );
+  }
+
+  function resolvePickTarget(x, y) {
+    if (!Number.isFinite(x) || !Number.isFinite(y)) return null;
+    const element = document.elementFromPoint(x, y);
+    return isPickableElement(element) ? element.closest("svg") || element : null;
+  }
+
+  function pickLabel(element) {
+    if (element.id) return element.localName + "#" + element.id;
+    return [element.localName].concat(Array.from(element.classList).slice(0, 2)).join(".");
+  }
+
+  // Only attributes that help find the element in source. data-* values and URL
+  // query strings or fragments can carry tokens.
+  const PICK_ATTRIBUTES = new Set([
+    "id",
+    "class",
+    "name",
+    "type",
+    "role",
+    "alt",
+    "aria-label",
+    "href",
+    "src",
+  ]);
+
+  function pickAttributeValue(attribute) {
+    return attribute.name === "href" || attribute.name === "src"
+      ? attribute.value.split(/[?#]/)[0]
+      : attribute.value;
+  }
+
+  function describePickElement(element) {
+    const chain = [];
+    for (
+      let current = element;
+      isPickableElement(current) && chain.length < PICK_CHAIN_LENGTH;
+      current = current.parentElement
+    ) {
+      chain.unshift(current);
+    }
+    const attributes = Array.from(element.attributes)
+      .filter((attribute) => PICK_ATTRIBUTES.has(attribute.name))
+      .map((attribute) => ` ${attribute.name}="${pickAttributeValue(attribute).replace(/"/g, "&quot;")}"`)
+      .join("");
+    const text = (element.innerText || element.textContent || "").replace(/\s+/g, " ").trim();
+    return {
+      chain: chain.map(pickLabel),
+      html: truncate(`<${element.localName}${attributes}>`, PICK_MAX_HTML_CHARS),
+      text: text ? truncate(text, PICK_MAX_TEXT_CHARS) : undefined,
+    };
+  }
+
+  // Hover asks once per frame, and innerText on a large section forces layout,
+  // so only the rect is re-read while the pointer stays on the same element.
+  // Clicks ask for fresh details since the page may have changed the element.
+  let lastPick = null;
+
+  function describePickTarget(element, fresh) {
+    if (fresh || lastPick?.element !== element) {
+      lastPick = { element, details: describePickElement(element) };
+    }
+    const rect = element.getBoundingClientRect();
+    return {
+      rect: { x: rect.left, y: rect.top, width: rect.width, height: rect.height },
+      ...lastPick.details,
+    };
+  }
+
+  function inlineAll(original, clone) {
+    if (original.nodeType !== 1 || clone.nodeType !== 1) return;
+
+    try {
+      const computedStyle = getComputedStyle(original);
+      // cssText on a computed style is the serialized declaration in modern
+      // Chromium/Safari — a single read beats enumerating ~400 longhand
+      // properties. Firefox returns "" here, so we fall back on empty.
+      const serialized = computedStyle.cssText;
+      if (serialized) {
+        clone.style.cssText = serialized;
+      } else {
+        const parts = new Array(computedStyle.length);
+        for (let index = 0; index < computedStyle.length; index += 1) {
+          const property = computedStyle[index];
+          parts[index] = `${property}:${computedStyle.getPropertyValue(property)};`;
+        }
+        clone.style.cssText = parts.join("");
+      }
+    } catch (_error) {}
+
+    const originalChildren = original.children;
+    const clonedChildren = clone.children;
+    for (
+      let index = 0;
+      index < originalChildren.length && index < clonedChildren.length;
+      index += 1
+    ) {
+      inlineAll(originalChildren[index], clonedChildren[index]);
+    }
+  }
+
+  function extractFontUrl(srcValue) {
+    const matches = [
+      ...srcValue.matchAll(
+        /url\(["']?([^"')]+)["']?\)(?:\s*format\(["']?([^"')]+)["']?\))?/gi,
+      ),
+    ];
+    if (matches.length === 0) return null;
+    const woff2 = matches.find((m) => m[2] && m[2].toLowerCase().includes("woff2"));
+    if (woff2) return woff2[1];
+    const woff = matches.find((m) => m[2] && m[2].toLowerCase().includes("woff"));
+    if (woff) return woff[1];
+    return matches[0][1];
+  }
+
+  // Cache resolved font URL -> data URI across captures. Fonts on a page
+  // essentially never change, and a batch run emits multiple captures back to
+  // back — without this we'd refetch + re-base64 every time.
+  const fontDataUriCache = new Map();
+  const SRC_DECLARATION_RE = /src\s*:\s*[^;}]+/i;
+
+  async function fetchAsDataUri(url) {
+    if (fontDataUriCache.has(url)) return fontDataUriCache.get(url);
+    let dataUri = null;
+    try {
+      const response = await fetch(url, { mode: "cors", credentials: "omit" });
+      if (response.ok) {
+        const blob = await response.blob();
+        if (blob.size <= MAX_FONT_BYTES) {
+          dataUri = await new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () =>
+              resolve(typeof reader.result === "string" ? reader.result : null);
+            reader.onerror = () => resolve(null);
+            reader.readAsDataURL(blob);
+          });
+        }
+      }
+    } catch (_error) {
+      dataUri = null;
+    }
+    fontDataUriCache.set(url, dataUri);
+    return dataUri;
+  }
+
+  function collectFontFaceRuleTexts() {
+    const rules = [];
+    for (const sheet of document.styleSheets) {
+      let cssRules;
+      try {
+        cssRules = sheet.cssRules;
+      } catch (_error) {
+        continue;
+      }
+      if (!cssRules) continue;
+      for (const rule of cssRules) {
+        const cssText = rule.cssText || "";
+        if (cssText.startsWith("@font-face")) rules.push(cssText);
+      }
+    }
+    return rules;
+  }
+
+  async function buildInlinedFontCss() {
+    const ruleTexts = collectFontFaceRuleTexts();
+    if (ruleTexts.length === 0) return null;
+
+    const resolved = ruleTexts.map((cssText) => {
+      if (!SRC_DECLARATION_RE.test(cssText)) return null;
+      const srcMatch = cssText.match(/src\s*:\s*([^;}]+)[;}]/i);
+      if (!srcMatch) return null;
+      const url = extractFontUrl(srcMatch[1]);
+      if (!url) return null;
+      try {
+        return { cssText, url: new URL(url, document.baseURI).href };
+      } catch (_error) {
+        return null;
+      }
+    });
+
+    const dataUris = await Promise.all(
+      resolved.map((entry) => (entry ? fetchAsDataUri(entry.url) : Promise.resolve(null))),
+    );
+
+    const inlined = [];
+    let totalBytes = 0;
+    for (let index = 0; index < resolved.length; index += 1) {
+      const entry = resolved[index];
+      const dataUri = dataUris[index];
+      if (!entry || !dataUri) continue;
+      const approxBytes = dataUri.length * 0.75;
+      if (totalBytes + approxBytes > MAX_TOTAL_FONT_BYTES) break;
+      totalBytes += approxBytes;
+      inlined.push(entry.cssText.replace(SRC_DECLARATION_RE, `src: url("${dataUri}")`));
+    }
+    return inlined.length > 0 ? inlined.join("\n") : null;
+  }
+
+  function stripExternal(clone) {
+    const images = clone.querySelectorAll("img");
+    for (let index = 0; index < images.length; index += 1) {
+      const src = images[index].getAttribute("src");
+      if (src && !src.startsWith("data:")) images[index].removeAttribute("src");
+    }
+
+    const elements = clone.querySelectorAll("*");
+    for (let index = 0; index < elements.length; index += 1) {
+      const style = elements[index].style.cssText;
+      if (style && style.includes("url(")) {
+        elements[index].style.cssText = style.replace(
+          /url\(["']?(?!data:)[^)"']*["']?\)/gi,
+          "none",
+        );
+      }
+    }
+  }
+
+  function emitScroll() {
+    scrollRaf = 0;
+    if (!scrollForwarding) return;
+    postToTrustedTop({
+      type: "INLINE_EDIT_SCROLL",
+      scrollX: window.scrollX,
+      scrollY: window.scrollY,
+      capabilities: PICK_CAPABILITIES,
+    });
+  }
+
+  window.addEventListener(
+    "scroll",
+    function () {
+      if (!scrollForwarding || scrollRaf) return;
+      scrollRaf = requestAnimationFrame(emitScroll);
+    },
+    { passive: true, capture: true },
+  );
+
+  async function handleCaptureRequest(event) {
+    const requestId = event.data.requestId;
+    const scrollX = window.scrollX;
+    const scrollY = window.scrollY;
+    const width = window.innerWidth;
+    const height = window.innerHeight;
+
+    function postResult(dataUrl) {
+      postToTrustedTop({
+        type: "INLINE_EDIT_SCREENSHOT_RESULT",
+        requestId,
+        dataUrl,
+        scrollX,
+        scrollY,
+      });
+    }
+
+    try {
+      // Wait for any pending web fonts to resolve so both inline metrics and
+      // the @font-face inlining below see the same loaded faces.
+      if (document.fonts && document.fonts.ready) {
+        try {
+          await document.fonts.ready;
+        } catch (_error) {}
+      }
+
+      const clone = document.documentElement.cloneNode(true);
+      inlineAll(document.documentElement, clone);
+
+      const removedNodes = clone.querySelectorAll("script,link[rel=\"stylesheet\"],style");
+      for (let index = 0; index < removedNodes.length; index += 1) {
+        removedNodes[index].remove();
+      }
+
+      stripExternal(clone);
+
+      // Re-embed web fonts as data-URI @font-face rules so the SVG rasterizer
+      // can resolve them — external font URLs aren't fetched during
+      // foreignObject rendering, which would otherwise force a fallback face
+      // and change text metrics.
+      const inlinedFontCss = await buildInlinedFontCss();
+      if (inlinedFontCss) {
+        const styleEl = document.createElement("style");
+        styleEl.textContent = inlinedFontCss;
+        const head = clone.querySelector("head");
+        if (head) head.appendChild(styleEl);
+        else clone.insertBefore(styleEl, clone.firstChild);
+      }
+
+      const html = new XMLSerializer().serializeToString(clone);
+      const svg =
+        `<svg xmlns="http://www.w3.org/2000/svg" width="${width}" height="${height}">` +
+        '<foreignObject width="100%" height="100%">' +
+        `<div xmlns="http://www.w3.org/1999/xhtml" style="width:${width}px;height:${height}px;overflow:hidden">` +
+        `<div style="position:relative;left:-${scrollX}px;top:-${scrollY}px">` +
+        html +
+        "</div></div></foreignObject></svg>";
+      const svgUrl = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+      const image = new Image();
+      image.onload = function () {
+        const canvas = document.createElement("canvas");
+        canvas.width = width;
+        canvas.height = height;
+        canvas.getContext("2d").drawImage(image, 0, 0);
+        postResult(canvas.toDataURL("image/png"));
+      };
+      image.onerror = function () {
+        postResult(null);
+      };
+      image.src = svgUrl;
+    } catch (_error) {
+      postResult(null);
+    }
+  }
+
+  window.addEventListener("message", function (event) {
+    if (!event.data) return;
+    // Only accept messages from the direct parent frame. Blocks sibling /
+    // unrelated-window postMessage senders that could otherwise reach us.
+    if (event.source !== window.parent) return;
+
+    const trustedParentOrigin = getTrustedParentOrigin(event);
+    if (!trustedParentOrigin) return;
+    trustedTopOrigin = trustedParentOrigin;
+
+    if (event.data.type === "INLINE_EDIT_PICK") {
+      const element = resolvePickTarget(event.data.x, event.data.y);
+      postToTrustedTop({
+        type: "INLINE_EDIT_PICK_RESULT",
+        seq: event.data.seq,
+        target: element ? describePickTarget(element, event.data.fresh === true) : null,
+      });
+      return;
+    }
+
+    if (event.data.type === "INLINE_EDIT_SCROLL_START") {
+      scrollForwarding = true;
+      emitScroll();
+      return;
+    }
+
+    if (event.data.type === "INLINE_EDIT_SCROLL_STOP") {
+      scrollForwarding = false;
+      if (scrollRaf) cancelAnimationFrame(scrollRaf);
+      scrollRaf = 0;
+      return;
+    }
+
+    if (event.data.type === "INLINE_EDIT_SCROLL_BY") {
+      const { deltaX, deltaY, deltaMode } = event.data;
+      if (!scrollForwarding || !Number.isFinite(deltaX) || !Number.isFinite(deltaY)) return;
+      if (deltaMode !== 0 && deltaMode !== 1 && deltaMode !== 2) return;
+      const lineHeight =
+        parseFloat(getComputedStyle(document.documentElement).lineHeight) || DEFAULT_LINE_HEIGHT;
+      const scaleX = deltaMode === 1 ? lineHeight : deltaMode === 2 ? window.innerWidth : 1;
+      const scaleY = deltaMode === 1 ? lineHeight : deltaMode === 2 ? window.innerHeight : 1;
+      // The selection overlay receives the wheel event instead of this iframe.
+      // Instant scrolling preserves trackpad deltas even on smooth-scroll sites.
+      window.scrollBy({ left: deltaX * scaleX, top: deltaY * scaleY, behavior: "instant" });
+      emitScroll();
+      return;
+    }
+
+    if (event.data.type !== "INLINE_EDIT_CAPTURE_REQUEST") return;
+
+    handleCaptureRequest(event);
+  });
+})();
+
+
+</script></body>
+</html>
